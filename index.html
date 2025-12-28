@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagement Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & BASICS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a0b12; /* Dark romantic background */
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fceabb; /* Gold/Cream text */
+        }
+
+        /* --- BACKGROUND PARTICLES --- */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,215,0,0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp 10s infinite linear;
+        }
+
+        /* --- THE INTRO OVERLAY --- */
+        .intro-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .intro-text {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        .open-btn {
+            padding: 15px 40px;
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .open-btn:hover {
+            background: #d4af37;
+            color: #000;
+            box-shadow: 0 0 20px #d4af37;
+        }
+
+        /* --- MAIN CARD CONTAINER --- */
+        .card-container {
+            position: relative;
+            width: 90%;
+            max-width: 500px; /* Slightly narrower for portrait look */
+            height: auto;
+            max-height: 90vh;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            opacity: 0; 
+            transform: scale(0.9);
+            transition: all 1s ease-out;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .card-container.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- IMAGE STYLING (NEW) --- */
+        .photo-frame {
+            width: 110px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid #d4af37;
+            margin: 15px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            opacity: 0;
+            transform: scale(0); /* Start hidden */
+            position: relative;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Optional: slight sepia for vintage look */
+            filter: sepia(20%); 
+        }
+
+        /* --- TEXT STYLING --- */
+        .header-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: #d4af37;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .names {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 5px 0;
+            line-height: 1.2;
+            opacity: 0;
+            transform: scale(1.1);
+            text-shadow: 0px 0px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .ampersand {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            display: block;
+            margin-top: -10px;
+            margin-bottom: -10px;
+            opacity: 0;
+        }
+
+        .details-section {
+            margin-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.5);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 15px 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .date-time {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            color: #d4af37;
+        }
+
+        .venue {
+            font-size: 0.85rem;
+            color: #efe0e0;
+            line-height: 1.5;
+        }
+
+        .rsvp-btn {
+            margin-top: 25px;
+            padding: 10px 30px;
+            background: #d4af37;
+            color: #1a0b12;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .rsvp-btn:hover {
+            transform: translateY(20px) scale(1.05);
+            background: #cb4e4e;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; text-shadow: 0 0 10px #d4af37; }
+        }
+
+        /* Reveal Order Classes */
+        .reveal-1 { animation: fadeInUp 1s forwards 0.5s; }      /* Header */
+        .reveal-photo { animation: popIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s; } /* Photo */
+        .reveal-2 { animation: zoomIn 1.5s forwards 1.3s; }      /* Names */
+        .reveal-3 { animation: fadeIn 1s forwards 1.8s; }        /* Ampersand */
+        .reveal-4 { animation: fadeInUp 1s forwards 2.2s; }      /* Details */
+        .reveal-5 { animation: fadeInUp 1s forwards 2.8s; }      /* Button */
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes popIn { 
+            0% { opacity: 0; transform: scale(0) rotate(-10deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .names { font-size: 2.5rem; }
+            .card-container { width: 90%; padding: 20px; }
+            .photo-frame { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        </audio>
+
+    <div id="particles"></div>
+
+    <div class="intro-overlay" id="intro">
+        <div class="intro-text"> Engagement invitaton</div>
+        <div class="intro-text">You Are Cordially Invited to with Family</div>
+        <button class="open-btn" onclick="openInvitation()">Open Invitation</button>
+    </div>
+
+    <div class="card-container" id="card">
+        <div class="header-text" id="anim-1">Save the Date</div>
+        
+        <div class="photo-frame" id="anim-photo">
+            <img src="index.jpeg" alt="IMAGE">
+        </div>
+
+        <div class="names" id="anim-2">
+            Manish Raja
+            <span class="ampersand" id="anim-3">&</span>
+            Rani Jaiswal
+        </div>
+
+        <div class="details-section" id="anim-4">
+            <div class="date-time"> Monday</div>
+            <div class="date-time">19 JANUARY 2026</div>
+            <div class="date-time"><Time>Function Start Time <br>
+            7:00PM</Time></div>
+            <div class="venue">
+                Nitmaya Banquet & Hall<br>
+                Supaul BIHAR
+            </div>
+        </div>
+
+        <a href="#" class="rsvp-btn" id="anim-5">Waiting for your blessings</a>
+    </div>
+
+    <script>
+        const particleContainer = document.getElementById('particles');
+        
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 5 + 2 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = Math.random() * 5 + 5 + 's';
+            particleContainer.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 10000);
+        }
+        setInterval(createParticle, 300);
+
+        function openInvitation() {
+            const intro = document.getElementById('intro');
+            const card = document.getElementById('card');
+            
+            intro.style.opacity = '0';
+            setTimeout(() => { intro.style.display = 'none'; }, 1500);
+
+            card.classList.add('active');
+
+            // Trigger Animations in Sequence
+            document.getElementById('anim-1').classList.add('reveal-1');
+            document.getElementById('anim-photo').classList.add('reveal-photo'); // New Photo Animation
+            document.getElementById('anim-2').classList.add('reveal-2');
+            document.getElementById('anim-3').classList.add('reveal-3');
+            document.getElementById('anim-4').classList.add('reveal-4');
+            document.getElementById('anim-5').classList.add('reveal-5');
+            
+            // document.getElementById('bg-music').play();
+        }
+    </script>
+</body>
+</html>
